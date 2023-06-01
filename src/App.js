@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
-import {Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import {Route, Routes, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
 import AppTopbarP from './AppTopbarP';
 import AppFooter from './AppFooter';
@@ -39,7 +39,6 @@ initAxiosInterceptors() // lo usa en el useEffect para preguntar si ese token lo
 
 
 const App = () => {
-
     /*
       Aca empieza mis estados  
     */
@@ -91,7 +90,7 @@ const App = () => {
         {
             label: 'Panel de control',
             icon: 'pi pi-fw pi-home',
-            items: [{ label: 'General', icon: 'pi pi-fw pi-home', to: '/' }]
+            items: [{ label: 'General', icon: 'pi pi-fw pi-home', to: '/dashboard' }]
         },
         {
             label: 'Secciones',
@@ -281,7 +280,6 @@ const App = () => {
     //     event.preventDefault();
     // };
     const onTopbarItemClick = (event, item) => {
- 
         deleteToken()
         navigate(`/`);
         event.preventDefault();
@@ -377,11 +375,12 @@ const App = () => {
                 </div>
     
                 <div className="layout-main">
-                    {/* {meta != undefined ? 
+                      {/* {meta != undefined ? 
                     <AppBreadcrumb meta={meta} /> :'' }
                      */}
                         <Routes>
-                            <Route exact path="/" element={<General />} />
+                            <Route path="/login" element={<Navigate to ="/dashboard" />}/>
+                            <Route exact path="/dashboard" element={<General />} />
                             <Route exact path="/movements" element={<Movement />} />
                             <Route exact path="/categories" element={<Category />} />
                             <Route exact path="/paymentMethods" element={<PaymentMethod />} />
@@ -421,19 +420,17 @@ const App = () => {
 
     const  LogoutRoute = ({ mostrarError ,error }) =>{
         return (
-                    <Routes>
-                        <Route path="/" element={<Login setToken={setToken} mostrarError={mostrarError} error={error}  />} />
-                    </Routes>
-   
+            <Routes>
+                <Route exact path="/login" element={<Login setToken={setToken} mostrarError={mostrarError} error={error}  />} />
+            </Routes>
         );
     }
 
     if(isExpired) return <div className="layout-main"><LogoutRoute mostrarError={mostrarError} error={error} /></div>
-    
+
     return (
         <div>
-               
-                <LoginRoute mostrarError={mostrarError} usuario={usuario}  />) 
+             <LoginRoute mostrarError={mostrarError} usuario={usuario}  />) 
         </div>
     );
 };

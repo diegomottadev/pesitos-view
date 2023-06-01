@@ -138,10 +138,15 @@ export const MovementList = () => {
                     <h5>Movimientos</h5>
                      <Toast ref={toast} />
 
-                     <DataTable ref={dt} value={movements} lazy
-                        paginator first={lazyParams.first} rows={10} totalRecords={totalRecords} onPage={onPage}
+                     <DataTable ref={dt} 
+                        value={movements} 
+                        lazy
+                        paginator first={lazyParams.first} 
+                        rows={10} 
+                        totalRecords={totalRecords} onPage={onPage}
                         loading={loadingDatatable}
                         className="p-datatable-gridlines" header={header}
+                        responsiveLayout="scroll"
                         >
                         <Column field="amount" header="Monto"  headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
                         <Column field="description" header="Descripción"  ></Column>

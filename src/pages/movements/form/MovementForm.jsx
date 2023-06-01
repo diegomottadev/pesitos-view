@@ -13,8 +13,22 @@ import ClasificationService from '../../../services/clasifications/Clasification
 import MovementService from '../../../services/movements/MovementService';
 import PaymentMethodService from '../../../services/PaymentMethods/PaymentMethodService';
 import SubclasificationService from '../../../services/subclasifications/SubclasificationService';
+import { Calendar } from 'primereact/calendar';
+import { addLocale } from 'primereact/api';
 
 export const MovementForm = () => {
+
+  addLocale('es', {
+    firstDayOfWeek: 1,
+    dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+    dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+    dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+    monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+    monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+    today: 'Hoy',
+    clear: 'Limpiar'
+  });
+
   const toast = useRef();
   const navigate = useNavigate();
   const { movementId } = useParams();
@@ -33,6 +47,7 @@ export const MovementForm = () => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [category, setCategory] = useState(null);
   const [typeBill, setTypeBill] = useState(null);
+  const [lastDate,setLastDate] = useState(new Date())
 
   useEffect(() => {
     const fetchMovement = async () => {
@@ -46,6 +61,7 @@ export const MovementForm = () => {
           setCategory(data.category?.id);
           setDescription(data.description)
           setTypeBill(data.typebill?.id)
+          setLastDate(new Date(data.lastDate));
         });
 
       } catch (error) {
@@ -146,6 +162,11 @@ export const MovementForm = () => {
       return;
     }
 
+    const yearEnd = lastDate.getFullYear();
+    const monthEnd = (lastDate.getMonth() + 1).toString().padStart(2, '0');
+    const dayEnd = lastDate.getDate().toString().padStart(2, '0');
+    const formattedDate = `${yearEnd}-${monthEnd}-${dayEnd} 00:00:00`;
+
     const body = {
       amount: parseFloat(amount),
       description: description,
@@ -153,7 +174,7 @@ export const MovementForm = () => {
       paymentMethod_id: paymentMethod,
       clasification_id: clasification ,
       subclasification_id: subclasification ,
-
+      lastDate: formattedDate,
       typebill_id: typeBill
     };
 
@@ -205,6 +226,11 @@ export const MovementForm = () => {
               <h5>{movementId ? 'Editar movimiento' : 'Nuevo movimiento'}</h5>
               <form onSubmit={handleSubmit}>
                 <div className="card p-fluid">
+
+                  <div className="field">
+                    <label htmlFor="name">Fecha</label>
+                    <Calendar value={lastDate} onChange={(e) => setLastDate(e.value)} showIcon  dateFormat="dd/mm/yy"  locale="es" />
+                  </div>
                   <div className="field">
                     <label htmlFor="name">Monto</label>
                     <InputText

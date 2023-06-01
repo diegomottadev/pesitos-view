@@ -5,6 +5,8 @@ import { Access } from './pages/Access';
 import { Error } from './pages/Error';
 import { Login } from './pages/Login';
 import { NotFound } from './pages/NotFound';
+import { Landing } from './pages/Landing';
+import General from './pages/general/General';
 
 const AppWrapper = () => {
     let location = useLocation();
@@ -15,7 +17,8 @@ const AppWrapper = () => {
 
     return (
         <Routes>
-            <Route path="/login" element={<Login />} />
+            {/* <Route path="/" element={<Landing />} /> */}
+            {/* <Route path="/dashboard" element={<General />} /> */}
             <Route path="/error" element={<Error />} />
             <Route path="/notfound" element={<NotFound />} />
             <Route path="/access" element={<Access />} />

@@ -105,11 +105,9 @@ export const PaymentMethodList = () => {
 
     const actionBodyTemplate = (rowData) => {
         return (
-            <div className="actions">
+            <div className="actions" style={{'display':'flex'}}>
                 <Button tooltip={"Editar"}  tooltipOptions={{ position: 'top' }} icon="pi pi-pencil" className="p-button-raised p-button-success p-mr-2" onClick={() => onEditWayPay(rowData.id)} />
                 <Button tooltip={"Eliminar"}  tooltipOptions={{ position: 'top' }} icon="pi pi-trash" className="p-button-raised p-button-danger p-mr-2" onClick={() => onDeleteWayPay(rowData.id)} />
-
-                {/* <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteTeacher(rowData)} /> */}
             </div>
         );
     }
@@ -127,10 +125,17 @@ export const PaymentMethodList = () => {
                     <h5>Formas de pago</h5>
                      <Toast ref={toast} />
 
-                     <DataTable ref={dt} value={methodPayments} lazy
-                        paginator first={lazyParams.first} rows={10} totalRecords={totalRecords} onPage={onPage}
+                     <DataTable ref={dt} 
+                        value={methodPayments} 
+                        lazy
+                        paginator 
+                        first={lazyParams.first} 
+                        rows={10} totalRecords={totalRecords} 
+                        onPage={onPage}
                         loading={loadingDatatable}
-                        className="p-datatable-gridlines" header={header}
+                        className="p-datatable-gridlines" 
+                        header={header}
+                        responsiveLayout="scroll"
                         >
                         <Column field="name" header="Nombre"  headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
                         <Column field="description" header="Descripción"  ></Column>
