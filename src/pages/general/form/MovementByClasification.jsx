@@ -13,6 +13,8 @@ import ClasificationService from '../../../services/clasifications/Clasification
 import MovementService from '../../../services/movements/MovementService';
 import PaymentMethodService from '../../../services/PaymentMethods/PaymentMethodService';
 import SubclasificationService from '../../../services/subclasifications/SubclasificationService';
+import MoneyService from '../../../services/moneys/MoneyService';
+import { Calendar } from 'primereact/calendar';
 
 export const MovementByClasification = () => {
   const toast = useRef();
@@ -24,7 +26,7 @@ export const MovementByClasification = () => {
   const [categories, setCategories] = useState(null)
   const [methodPayments, setMethodPayments] = useState(null)
   const [subclasifications, setSubclasifications] = useState(null)
-
+  const [moneys, setMoneys] = useState(null)
 
   const [movement, setMovement] = useState(null);
   const [amount, setAmount] = useState('');
@@ -33,6 +35,9 @@ export const MovementByClasification = () => {
   const [subclasification, setSubclasification] = useState(null);
   const [category, setCategory] = useState(null);
   const [typeBill, setTypeBill] = useState(null);
+  const [money, setMoney] = useState(1);
+  const [lastDate,setLastDate] = useState(new Date())
+
 
 //   useEffect(() => {
 //     const fetchMovement = async () => {
@@ -73,7 +78,20 @@ export const MovementByClasification = () => {
 
   }, []);
 
+  useEffect(() => {
+    const fetchMoneys = async () => {
+      try {
+        const { data: response } = await MoneyService.allMoneys();
+        setMoneys(response.data);
 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMoneys();
+
+  }, []);
 
   useEffect(() => {
     const fetchMethodPayments = async () => {
@@ -142,7 +160,10 @@ export const MovementByClasification = () => {
       });
       return;
     }
-
+    const yearEnd = lastDate.getFullYear();
+    const monthEnd = (lastDate.getMonth() + 1).toString().padStart(2, '0');
+    const dayEnd = lastDate.getDate().toString().padStart(2, '0');
+    const formattedDate = `${yearEnd}-${monthEnd}-${dayEnd} 00:00:00`;
     const body = {
       amount: parseFloat(amount),
       description: description,
@@ -150,7 +171,9 @@ export const MovementByClasification = () => {
       paymentMethod_id: paymentMethod,
       clasification_id: parseInt(clasificationId) ,
       subclasification_id: subclasification,
-      typebill_id: typeBill
+      typebill_id: typeBill,
+      money_id: money,
+      lastDate: formattedDate
     };
 
     try {
@@ -207,6 +230,10 @@ export const MovementByClasification = () => {
               <form onSubmit={handleSubmit}>
                 <div className="card p-fluid">
                   <div className="field">
+                  <div className="field">
+                    <label htmlFor="name">Fecha</label>
+                    <Calendar value={lastDate} onChange={(e) => setLastDate(e.value)} showIcon  dateFormat="dd/mm/yy"  locale="es" />
+                  </div>
                     <label htmlFor="name">Monto</label>
                     <InputText
                       id="name"
@@ -224,6 +251,10 @@ export const MovementByClasification = () => {
                       pattern="\d{0,12}"
                       placeholder='0'
                     />
+                  </div>
+                  <div className='field'>
+                    <label htmlFor="money">Moneda</label>
+                    <Dropdown value={money} optionValue="id" onChange={(e) => setMoney(e.value)} options={moneys} optionLabel="symbol" placeholder="-- Seleccionar moneda --" />
                   </div>
                   <div className="field">
                     <label htmlFor="description">Descripción</label>

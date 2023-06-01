@@ -15,6 +15,7 @@ import PaymentMethodService from '../../../services/PaymentMethods/PaymentMethod
 import SubclasificationService from '../../../services/subclasifications/SubclasificationService';
 import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
+import MoneyService from '../../../services/moneys/MoneyService';
 
 export const MovementForm = () => {
 
@@ -38,6 +39,7 @@ export const MovementForm = () => {
   const [subclasifications, setSubclasifications] = useState(null);
   const [categories, setCategories] = useState(null)
   const [methodPayments, setMethodPayments] = useState(null)
+  const [moneys, setMoneys] = useState(null)
 
   const [movement, setMovement] = useState(null);
   const [amount, setAmount] = useState('');
@@ -48,6 +50,7 @@ export const MovementForm = () => {
   const [category, setCategory] = useState(null);
   const [typeBill, setTypeBill] = useState(null);
   const [lastDate,setLastDate] = useState(new Date())
+  const [money,setMoney] = useState(1)
 
   useEffect(() => {
     const fetchMovement = async () => {
@@ -62,6 +65,7 @@ export const MovementForm = () => {
           setDescription(data.description)
           setTypeBill(data.typebill?.id)
           setLastDate(new Date(data.lastDate));
+          setMoney(data?.money_id)
         });
 
       } catch (error) {
@@ -104,6 +108,22 @@ export const MovementForm = () => {
     };
 
     fetchMethodPayments();
+
+  }, []);
+
+
+  useEffect(() => {
+    const fetchMoneys = async () => {
+      try {
+        const { data: response } = await MoneyService.allMoneys();
+        setMoneys(response.data);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMoneys();
 
   }, []);
 
@@ -175,7 +195,8 @@ export const MovementForm = () => {
       clasification_id: clasification ,
       subclasification_id: subclasification ,
       lastDate: formattedDate,
-      typebill_id: typeBill
+      typebill_id: typeBill,
+      money_id: money
     };
 
     try {
@@ -249,6 +270,10 @@ export const MovementForm = () => {
                       pattern="\d{0,12}"
                       placeholder='0'
                     />
+                  </div>
+                  <div className='field'>
+                    <label htmlFor="money">Moneda</label>
+                    <Dropdown value={money} optionValue="id" onChange={(e) => setMoney(e.value)} options={moneys} optionLabel="symbol" placeholder="-- Seleccionar moneda --" />
                   </div>
                   <div className="field">
                     <label htmlFor="description">Descripción</label>

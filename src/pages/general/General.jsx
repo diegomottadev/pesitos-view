@@ -7,6 +7,7 @@ import { Calendar } from 'primereact/calendar';
 import { addLocale } from 'primereact/api';
 import { Chart } from 'primereact/chart';
 import { Message } from 'primereact/message';
+import TagDollars from './components/TagDollars';
 
 const General = () => {
 
@@ -24,7 +25,6 @@ const General = () => {
     const [movements, setMovements] = useState(null);
     const [cards, setCards] = useState(null);
     const [savings, setSavings] = useState(null);
-    const [dollars, setDollars] = useState(null);
     const [totalIncomes, setTotalIncomes] = useState(null);
     const [totalExpenses, setTotalExpenses] = useState(null);
     const [balance, setBalance] = useState(null);
@@ -34,6 +34,15 @@ const General = () => {
     const [percentageNotSpent, setPercentageNotSpent] = useState(false);
     const [percentageSaving, setPercentageSaving] = useState(false);
     const [percentageCard, setPercentageCard] = useState(false);
+
+    const [incomesUSD, setIncomesUSD] = useState(null);
+    const [expensesUSD, setExpensesUSD] = useState(null);
+    const [cardsUSD, setCardsUSD] = useState(null);
+    const [savingsUSD, setSavingsUSD] = useState(null);
+    const [totalIncomesUSD, setTotalIncomesUSD] = useState(null);
+    const [totalExpensesUSD, setTotalExpensesUSD] = useState(null);
+    const [balanceUSD, setBalanceUSD] = useState(null);
+
 
     addLocale('es', {
         firstDayOfWeek: 1,
@@ -130,7 +139,6 @@ const General = () => {
                 setExpenses(general?.expenses || null)
                 setCards(general?.cards || null)
                 setSavings(general?.savings || null)
-                setDollars(general?.dollars || null)
                 setTotalIncomes(general?.total_incomes || null)
                 setTotalExpenses(general?.total_bills || null)
                 setBalance(general?.balance || null)
@@ -196,7 +204,6 @@ const General = () => {
                 setExpenses(general?.expenses || null)
                 setCards(general?.cards || null)
                 setSavings(general?.savings || null)
-                setDollars(general?.dollars || null)
                 setTotalIncomes(general?.total_incomes || null)
                 setTotalExpenses(general?.total_bills || null)
                 setBalance(general?.balance || null)
@@ -237,7 +244,6 @@ const General = () => {
                 setExpenses(general?.expenses || null)
                 setCards(general?.cards || null)
                 setSavings(general?.savings || null)
-                setDollars(general?.dollars || null)
                 setTotalIncomes(general?.total_incomes || null)
                 setTotalExpenses(general?.total_bills || null)
                 setBalance(general?.balance || null)
@@ -332,10 +338,211 @@ const General = () => {
         setPageSize(pageSize + 10)
     }
 
+
+    /* 
+        use efect para valores en dolares
+    */
+
+        useEffect(() => {
+            async function loadLazyData() {
+                let params = {}
+                params.money = 2
+                try {
+                    if (month) {
+                        const date = new Date(month);
+                        const monthCharnged = date.getMonth() + 1
+                        params.month = monthCharnged
+                        
+                    }
+    
+                    const { data: { data: { movements, totalMovements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+    
+                    setIncomesUSD(general?.incomes || null)
+                    setExpensesUSD(general?.expenses || null)
+                    setCardsUSD(general?.cards || null)
+                    setSavingsUSD(general?.savings || null)
+                    setTotalIncomesUSD(general?.total_incomes || null)
+                    setTotalExpensesUSD(general?.total_bills || null)
+                    setBalanceUSD(general?.balance || null)
+
+                    // });
+                } catch (err) {
+                    console.log(err);
+                    console.warn('Hubo un problema con la carga de estadisticas generales');
+                    setShowError(true);
+    
+                }
+    
+            }
+            if (month) loadLazyData();
+    
+    
+    
+        }, [month])
+    
+        useEffect(() => {
+            async function loadLazyData() {
+                let params = {}
+                params.money = 2
+                try {
+                    if (dateInit && dateEnd) {
+    
+                        // Obtenemos los componentes de fecha y hora del objeto Date
+                        const yearInit = dateInit.getFullYear();
+                        const monthInit = (dateInit.getMonth() + 1).toString().padStart(2, '0');
+                        const dayInit = dateInit.getDate().toString().padStart(2, '0');
+    
+                        // Formateamos los componentes en la cadena de fecha y hora deseada
+                        const formattedDateInit = `${yearInit}-${monthInit}-${dayInit} 00:00:00`;
+    
+                        params.dateInit = formattedDateInit
+    
+                        const yearEnd = dateEnd.getFullYear();
+                        const monthEnd = (dateEnd.getMonth() + 1).toString().padStart(2, '0');
+                        const dayEnd = dateEnd.getDate().toString().padStart(2, '0');
+    
+                        // Formateamos los componentes en la cadena de fecha y hora deseada
+                        const formattedDateEnd = `${yearEnd}-${monthEnd}-${dayEnd} 00:00:00`;
+    
+                        params.dateEnd = formattedDateEnd
+                    }
+    
+                    const { data: { data: { movements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                    setIncomesUSD(general?.incomes || null)
+                    setExpensesUSD(general?.expenses || null)
+                    setCardsUSD(general?.cards || null)
+                    setSavingsUSD(general?.savings || null)
+                    setTotalIncomesUSD(general?.total_incomes || null)
+                    setTotalExpensesUSD(general?.total_bills || null)
+                    setBalanceUSD(general?.balance || null)
+
+                } catch (err) {
+                    console.log(err);
+                    console.warn('Hubo un problema con la carga de estadisticas generales');
+                    setShowError(true);
+    
+                }
+    
+            }
+    
+            loadLazyData();
+    
+        }, [dateInit, dateEnd])
+    
+        useEffect(() => {
+            async function loadLazyData() {
+                let params = {}
+                params.money = 2
+                try {
+                    if (dateCurrent) {
+    
+                        // Obtenemos los componentes de fecha y hora del objeto Date
+                        const year = dateCurrent.getFullYear();
+                        const month = (dateCurrent.getMonth() + 1).toString().padStart(2, '0');
+                        const day = dateCurrent.getDate().toString().padStart(2, '0');
+    
+                        // Formateamos los componentes en la cadena de fecha y hora deseada
+                        const formattedDate = `${year}-${month}-${day} 00:00:00`;
+    
+                        params.dateCurrent = formattedDate
+    
+                    }
+    
+                    const { data: { data: { movements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                    setIncomesUSD(general?.incomes || null)
+                    setExpensesUSD(general?.expenses || null)
+                    setCardsUSD(general?.cards || null)
+                    setSavingsUSD(general?.savings || null)
+                    setTotalIncomesUSD(general?.total_incomes || null)
+                    setTotalExpensesUSD(general?.total_bills || null)
+                    setBalanceUSD(general?.balance || null)
+                } catch (err) {
+                    console.log(err);
+                    console.warn('Hubo un problema con la carga de estadisticas generales');
+                    setShowError(true);
+                }
+            }
+    
+            if (dateCurrent) loadLazyData();
+    
+        }, [dateCurrent])
+    
+    
+        useEffect(() => {
+            async function loadLazyData() {
+                let params = {}
+                params.money = 2
+                try {
+    
+                    if (dateCurrent) {
+    
+                        // Obtenemos los componentes de fecha y hora del objeto Date
+                        const year = dateCurrent.getFullYear();
+                        const month = (dateCurrent.getMonth() + 1).toString().padStart(2, '0');
+                        const day = dateCurrent.getDate().toString().padStart(2, '0');
+    
+                        // Formateamos los componentes en la cadena de fecha y hora deseada
+                        const formattedDate = `${year}-${month}-${day} 00:00:00`;
+    
+                        params.dateCurrent = formattedDate
+    
+                    }
+    
+                    if (month) {
+                        const date = new Date(month);
+                        const monthCharnged = date.getMonth() + 1
+                        params.month = monthCharnged
+                    }
+    
+                    if (dateInit && dateEnd) {
+    
+                        // Obtenemos los componentes de fecha y hora del objeto Date
+                        const yearInit = dateInit.getFullYear();
+                        const monthInit = (dateInit.getMonth() + 1).toString().padStart(2, '0');
+                        const dayInit = dateInit.getDate().toString().padStart(2, '0');
+    
+                        // Formateamos los componentes en la cadena de fecha y hora deseada
+                        const formattedDateInit = `${yearInit}-${monthInit}-${dayInit} 00:00:00`;
+    
+                        params.dateInit = formattedDateInit
+    
+                        const yearEnd = dateEnd.getFullYear();
+                        const monthEnd = (dateEnd.getMonth() + 1).toString().padStart(2, '0');
+                        const dayEnd = dateEnd.getDate().toString().padStart(2, '0');
+    
+                        // Formateamos los componentes en la cadena de fecha y hora deseada
+                        const formattedDateEnd = `${yearEnd}-${monthEnd}-${dayEnd} 00:00:00`;
+    
+                        params.dateEnd = formattedDateEnd
+    
+                    }
+                    params.pageSize = pageSize
+                    setLoadingMoreMovement(true)
+                    const { data: { data: { movements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                    setIncomesUSD(general?.incomes || null)
+                    setExpensesUSD(general?.expenses || null)
+                    setCardsUSD(general?.cards || null)
+                    setSavingsUSD(general?.savings || null)
+                    setTotalIncomesUSD(general?.total_incomes || null)
+                    setTotalExpensesUSD(general?.total_bills || null)
+                    setBalanceUSD(general?.balance || null)
+                    // });
+                } catch (err) {
+                    console.log(err);
+                    console.warn('Hubo un problema con la carga de estadisticas generales');
+                    setShowError(true);
+    
+                }
+    
+            }
+    
+            if (pageSize >= 20) loadLazyData();
+    
+        }, [pageSize])
+
+
     let dateMonthLabel = month ??  new Date();  // 2009-11-10
     let monthLabel = dateMonthLabel.toLocaleString('default', { month: 'long' });
-
-
 
     const dataset = doughnutData?.datasets[0]; // Obtén el primer dataset (índice 0)
     const hasNullValues = dataset?.data.some(value => value === null);
@@ -393,13 +600,13 @@ const General = () => {
                         <div className="p-fluid formgrid grid">
 
                             <div className="col-12 lg:col-6 xl:col-6">
-                                <h5 className="centerText">Resumen anual</h5>
+                                <h5 className="centerText">Resumen anual en $</h5>
                                 <Chart type="line" data={lineData} />
                             </div>
 
                             <div className="col-12 lg:col-6 xl:col-6">
                                 
-                                <h5 className='centerText'>Resumen mensual de {monthLabel} en % </h5>
+                                <h5 className='centerText'>Resumen mensual de {monthLabel} % en $ </h5>
                                 
                                 <div className="flex justify-content-center">
                                     {!hasNullValues &&
@@ -414,7 +621,8 @@ const General = () => {
                         </div>
                     </div>
                 </div>
-                <TagGeneral onDateCurrent={dateCurrent} onDateFormatInit={dateInit} onDateFormatEnd={dateEnd} onMonth={month} balance={balance} totalIncomes={totalIncomes} totalExpenses={totalExpenses} incomes={incomes} expenses={expenses} savings={savings} cards={cards} dollars={dollars} />
+                <TagGeneral onDateCurrent={dateCurrent} onDateFormatInit={dateInit} onDateFormatEnd={dateEnd} onMonth={month} balance={balance} totalIncomes={totalIncomes} totalExpenses={totalExpenses} incomes={incomes} expenses={expenses} savings={savings} cards={cards} />
+                <TagDollars onDateCurrent={dateCurrent} onDateFormatInit={dateInit} onDateFormatEnd={dateEnd} onMonth={month} balance={balanceUSD} totalIncomes={totalIncomesUSD} totalExpenses={totalExpensesUSD} incomes={incomesUSD} expenses={expensesUSD} savings={savingsUSD} cards={cardsUSD} />
                 <Timeline movements={movements} onLoadMoreMovents={onLoadMoreMovents} loadingMoreMovements={loadingMoreMovements} onTotalMovements={totalMovements} />
             </div>
         </div>

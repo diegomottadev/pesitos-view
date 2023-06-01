@@ -148,6 +148,8 @@ export const MovementList = () => {
                         className="p-datatable-gridlines" header={header}
                         responsiveLayout="scroll"
                         >
+                        <Column field="money.symbol" header="Moneda"  ></Column>
+    
                         <Column field="amount" header="Monto"  headerStyle={{ width: '14%', minWidth: '10rem' }}></Column>
                         <Column field="description" header="Descripción"  ></Column>
                         <Column field="lastDate" header="Fecha"  ></Column>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import MovementService from '../../../services/movements/MovementService';
 import './TagGeneral.css'
 
-const TagGeneral = ({onDateCurrent,onDateFormatInit, onDateFormatEnd, onMonth, balance, totalIncomes, totalExpenses, incomes, expenses, savings, cards,dollars }) => {   
+const TagDollars = ({onDateCurrent,onDateFormatInit, onDateFormatEnd, onMonth, balance, totalIncomes, totalExpenses, incomes, expenses, savings, cards,dollars }) => {   
     
     const navigate = useNavigate();
 
@@ -116,17 +116,19 @@ const TagGeneral = ({onDateCurrent,onDateFormatInit, onDateFormatEnd, onMonth, b
                     </div>
                 </div>
             </div> */}
+
+
             <div className="card">
                 {
                     formattedDateEnd && formattedDateInit &&              
-                    <h3 className='text-center'>Detalle desde {formattedDateInit} hasta {formattedDateEnd} en $ </h3>  
+                    <h3 className='text-center'>Detalle desde {formattedDateInit} hasta {formattedDateEnd} en U$D </h3>  
                 }
                 {    
-                    formattedDateCurrent && <h3 className='text-center'>Detalle del {formattedDateCurrent} en $ </h3>
+                    formattedDateCurrent && <h3 className='text-center'>Detalle del {formattedDateCurrent} en U$D </h3>
                 }
                 {(!formattedDateEnd && !formattedDateInit) && !formattedDateCurrent && 
                 
-                <h3 className='text-center'>Detalle mensual de {monthLabel} en $ </h3>
+                <h3 className='text-center'>Detalle mensual de {monthLabel} en U$D </h3>
                 
                 }
 
@@ -146,14 +148,14 @@ const TagGeneral = ({onDateCurrent,onDateFormatInit, onDateFormatEnd, onMonth, b
                             {/* <div className="overview-subinfo">7% more than yesterday</div> */}
                         </div>
                     </div>
-                    <div className="col-12 lg:col-6 xl:col-4">
+                    <div className="col-12 lg:col-6 xl:col-6">
                         <div className="overview-box sales">
                             <Button onClick={() =>onMovementByClasificationNew(1)} style={{'background': '#ffffff', 'color':'#42A5F5','borderColor':'#42A5F5'}} tooltip="Ingresar ingresos" tooltipOptions={{ position: 'top' }} icon="pi pi-plus" className="overview-icon p-button-rounded mr-2 mb-2"  />
                             <span className="overview-title"><i className="pi pi-sort-amount-up " style={{ fontSize: '1.5rem' }}></i> Ingresos</span>
                             <div className="overview-numbers">$ {incomes || "0.00" }</div>
                         </div>
                     </div>
-                    <div className="col-12 lg:col-6 xl:col-4">
+                    <div className="col-12 lg:col-6 xl:col-6">
                         <div className="overview-box users ">
                             <Button onClick={() =>onMovementByClasificationNew(2)} style={{'background': '#ffffff', 'color':'#FFB300','borderColor':'#FFB300'}} tooltip="Ingresar gastos " tooltipOptions={{ position: 'top' }} icon="pi pi-plus" className="overview-icon p-button-rounded mr-2 mb-2" />
                             <span className="overview-title"><i className="pi pi-sort-amount-down" style={{ fontSize: '1.5rem' }}></i> Gastos</span>
@@ -161,17 +163,16 @@ const TagGeneral = ({onDateCurrent,onDateFormatInit, onDateFormatEnd, onMonth, b
                         </div>
                     </div>
                    
-                    <div className="col-12 lg:col-6 xl:col-4">
+                    {/* <div className="col-12 lg:col-6 xl:col-4">
                         <div className="overview-box views" style={{ 'backgroundColor': '#d32f2f' }}>
                             <Button onClick={() =>onMovementByClasificationNew(4)} style={{'background': '#ffffff', 'color':'rgb(211, 47, 47)'}} icon="pi pi-plus" tooltip="Ingresar tarjetas " tooltipOptions={{ position: 'top' }} className="overview-icon p-button-rounded mr-2 mb-2" />
                             <span className="overview-title"><i className="pi pi-credit-card" style={{ fontSize: '1.5rem' }}></i> Tarjetas</span>
                             <div className="overview-numbers">$ {cards || "0.00" }</div>
-                            {/* <div className="overview-subinfo">18% more than yesterday</div> */}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
     );
 }
-export default TagGeneral;
+export default TagDollars;
