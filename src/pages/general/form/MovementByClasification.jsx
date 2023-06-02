@@ -215,7 +215,7 @@ export const MovementByClasification = () => {
         <AppBreadcrumb meta={`${clasification.name} / Editar`} /> : <AppBreadcrumb meta={`${clasification.name} / Nuevo`} />}
       <div className="layout-content">
 
-        <Toast ref={toast} onHide={() => navigate('/')} />
+        <Toast ref={toast} onHide={() => navigate('/bashboard')} />
         <div className="grid">
           <div className="col-12">
             <div className="card">
