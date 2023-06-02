@@ -202,7 +202,7 @@ export const MovementByClasification = () => {
   };
 
   const goBackHome = () => {
-    navigate('/');
+    navigate('/dashboard');
   };
 
   if(!clasification){
@@ -215,7 +215,7 @@ export const MovementByClasification = () => {
         <AppBreadcrumb meta={`${clasification.name} / Editar`} /> : <AppBreadcrumb meta={`${clasification.name} / Nuevo`} />}
       <div className="layout-content">
 
-        <Toast ref={toast} onHide={() => navigate('/bashboard')} />
+        <Toast ref={toast} onHide={() => navigate('/dashboard')} />
         <div className="grid">
           <div className="col-12">
             <div className="card">
