@@ -62,18 +62,22 @@ const General = () => {
     const [dateEnd, setDateEnd] = useState(null);
     const [pageSize, setPageSize] = useState(10);
     const [lineData, setLineData] = useState(null);
+    const [doughnutExpensesData, setDoughnutExpensesData] = useState(null);
 
     useEffect(() => {
         async function loadLazyData() {
             let params = {}
             try {
                 const { data: { data } } = await MovementService.allBillsIncomesTotalPerYear(params)
-                const months = data.recordMonths.map(record => record.month);
+                const months = data.recordMonths.map(record => record.month_name);
                 const totalIncomesMonth = data.recordMonths.map(record => parseFloat(record.incomes));
                 const totalExpensesMonth = data.recordMonths.map(record => parseFloat(record.expenses));
                 const totalSavingsMonth = data.recordMonths.map(record => parseFloat(record.savings));
                 const totalCardsMonth = data.recordMonths.map(record => parseFloat(record.cards));
-
+                const totalPercentegeIncomesMonth = data.recordMonths.map(record => parseFloat(record.percentage_not_spent));
+                const totalPercentegeExpensesMonth = data.recordMonths.map(record => parseFloat(record.percentage_expensives));
+                const totalPercentegeSavingsMonth = data.recordMonths.map(record => parseFloat(record.percentage_savings));
+                const totalPercentegeCardsMonth = data.recordMonths.map(record => parseFloat(record.percentage_cards));
                 // Actualizar la constante `lineData` con los nuevos datos
                 setLineData({
                     labels: [...months],
@@ -110,6 +114,42 @@ const General = () => {
                 });
 
 
+                setDoughnutData({
+                    labels: [...months],
+                    datasets: [
+
+                        {
+                            label: 'Ingresos',
+                            data: [...totalPercentegeIncomesMonth],
+                            backgroundColor: '#42A5F5',
+                            borderColor: '#42a5f5e0'
+                        },
+                        {
+                            label: 'Gastos',
+                            data: [...totalPercentegeExpensesMonth],
+                            backgroundColor: '#FFB300',
+                            borderColor:'#ffb300e6'
+                        },
+                        {
+                            label: 'Ahorros',
+                            data: [...totalPercentegeSavingsMonth],
+                            backgroundColor: '#66BB6A',
+                            borderColor:'#66bb6ae6'
+
+                        },
+                        {
+                            label: 'Tarjetas',
+                            data: [...totalPercentegeCardsMonth],
+                            backgroundColor: 'rgb(211, 47, 47)',
+                            borderColor:'#d32f2fe3'
+
+                        }
+                    ]
+
+
+                    
+                })
+
                 // });
             } catch (err) {
                 console.log(err);
@@ -133,7 +173,7 @@ const General = () => {
                     params.month = monthCharnged
                 }
 
-                const { data: { data: { movements, totalMovements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                const { data: { data: { movements, totalMovements, transformedResults: { general } ,totalPerCategory} } } = await MovementService.allBillsIncomesTotalPerMonth(params)
 
                 setIncomes(general?.incomes || null)
                 setExpenses(general?.expenses || null)
@@ -148,16 +188,61 @@ const General = () => {
                 setPercentageNotSpent(general?.percentage_not_spent)
                 setPercentageSaving(general?.percentage_savings)
                 setPercentageCard(general?.percentage_cards)
-                setDoughnutData({
-                    labels: ['Ingresos', 'Gastos', 'Ahorros','Tarjetas'],
+
+                const labelsExpense = totalPerCategory?.map((category) => category.name);
+                const dataExpense = totalPerCategory?.map((category) => parseFloat(category.percentage));
+                const colorExpense = [
+                    '#42A5F5',
+                    '#FFB300',
+                    '#66BB6A',
+                    'rgb(211, 47, 47)',
+                    '#6A8DBB',
+                    '#FFA726',
+                    '#4CAF50',
+                    'rgb(184, 51, 51)',
+                    '#5C6BC0',
+                    '#FFC107',
+                    '#43A047',
+                    'rgb(179, 62, 62)'
+                  ];
+
+                  const colorHoverExpense = [
+                    '#79C1F9',
+                    '#FFC863',
+                    '#8EE18C',
+                    'rgb(232, 128, 128)',
+                    '#95B9D6',
+                    '#FFC387',
+                    '#6BDA70',
+                    'rgb(211, 103, 103)',
+                    '#8491D1',
+                    '#FFD77D',
+                    '#7ACD78',
+                    'rgb(211, 113, 113)'
+                  ];
+                // setDoughnutData({
+                //     labels: ['Ingresos', 'Gastos', 'Ahorros','Tarjetas'],
+                //     datasets: [
+                //         {
+                //             data: [general?.percentage_not_spent, general?.percentage_spent, general?.percentage_savings,general?.percentage_cards],
+                //             backgroundColor: ['#42A5F5', '#FFB300', '#66BB6A','rgb(211, 47, 47)'],
+                //             hoverBackgroundColor: ['#42a5f5e0', '#ffb300e6', '#66bb6ae6','#d32f2fe3']
+                //         }
+                //     ]
+                // })
+
+
+                setDoughnutExpensesData({
+                    labels: [...labelsExpense],
                     datasets: [
                         {
-                            data: [general?.percentage_not_spent, general?.percentage_spent, general?.percentage_savings,general?.percentage_cards],
-                            backgroundColor: ['#42A5F5', '#FFB300', '#66BB6A','rgb(211, 47, 47)'],
-                            hoverBackgroundColor: ['#42a5f5e0', '#ffb300e6', '#66bb6ae6','#d32f2fe3']
+                            data: [...dataExpense],
+                            backgroundColor: [...colorExpense],
+                            hoverBackgroundColor: [...colorHoverExpense]
                         }
                     ]
                 })
+
                 // });
             } catch (err) {
                 console.log(err);
@@ -376,8 +461,6 @@ const General = () => {
             }
             if (month) loadLazyData();
     
-    
-    
         }, [month])
     
         useEffect(() => {
@@ -407,7 +490,7 @@ const General = () => {
                         params.dateEnd = formattedDateEnd
                     }
     
-                    const { data: { data: { movements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                    const { data: { data: {  transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
                     setIncomesUSD(general?.incomes || null)
                     setExpensesUSD(general?.expenses || null)
                     setCardsUSD(general?.cards || null)
@@ -448,7 +531,7 @@ const General = () => {
     
                     }
     
-                    const { data: { data: { movements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                    const { data: { data: {  transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
                     setIncomesUSD(general?.incomes || null)
                     setExpensesUSD(general?.expenses || null)
                     setCardsUSD(general?.cards || null)
@@ -518,7 +601,7 @@ const General = () => {
                     }
                     params.pageSize = pageSize
                     setLoadingMoreMovement(true)
-                    const { data: { data: { movements, transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
+                    const { data: { data: {  transformedResults: { general } } } } = await MovementService.allBillsIncomesTotalPerMonth(params)
                     setIncomesUSD(general?.incomes || null)
                     setExpensesUSD(general?.expenses || null)
                     setCardsUSD(general?.cards || null)
@@ -543,9 +626,6 @@ const General = () => {
 
     let dateMonthLabel = month ??  new Date();  // 2009-11-10
     let monthLabel = dateMonthLabel.toLocaleString('default', { month: 'long' });
-
-    const dataset = doughnutData?.datasets[0]; // Obtén el primer dataset (índice 0)
-    const hasNullValues = dataset?.data.some(value => value === null);
 
     return (
         <div >
@@ -601,24 +681,20 @@ const General = () => {
 
                             <div className="col-12 lg:col-6 xl:col-6">
                                 <h5 className="centerText">Resumen anual en $</h5>
-                                <Chart type="line" data={lineData} />
+                                <Chart   type="line" data={lineData} />
                             </div>
 
                             <div className="col-12 lg:col-6 xl:col-6">
-                                
-                                <h5 className='centerText'>Resumen mensual de {monthLabel} % en $ </h5>
-                                
+                                <h5 className='centerText'>Resumen anual en % en $ </h5>
+                                <Chart  type="bar" data={doughnutData} />
+                            </div>
+                            <div className="col-12 lg:col-12 xl:col-12">
+                                <h5 className='centerText'>Resumen mensual de gastos {monthLabel} % en $ </h5>
                                 <div className="flex justify-content-center">
-                                    {!hasNullValues &&
-                                    <Chart style={{ position: 'relative', width: '50%' }} type="doughnut" data={doughnutData} />
-                                    }
-                                    {hasNullValues &&
-                                       <Message severity="info" text="No es posible mostrar resumen mensual en % en este momento" />
-                                    }
-
+                                    <Chart style={{ position: 'relative', width: '5 0%' }} type="doughnut" data={doughnutExpensesData} />
+                                </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
                 <TagGeneral onDateCurrent={dateCurrent} onDateFormatInit={dateInit} onDateFormatEnd={dateEnd} onMonth={month} balance={balance} totalIncomes={totalIncomes} totalExpenses={totalExpenses} incomes={incomes} expenses={expenses} savings={savings} cards={cards} />

@@ -21,7 +21,7 @@ const Timeline = ({movements,onLoadMoreMovents,loadingMoreMovements,onTotalMovem
                                     <i className="pi pi-globe"></i>
                                 </div> */}
                                 <div className="timeline-content">
-                                    <h5>$ {movement.amount}</h5>
+                                    <h5>{movement?.money.symbol} {movement.amount}</h5>
                                     <h3>{movement?.clasification?.name}</h3>
 
                                     <p>{movement?.subclasification?.name}</p>
