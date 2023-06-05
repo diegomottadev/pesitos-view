@@ -35,6 +35,8 @@ const General = () => {
     const [percentageSaving, setPercentageSaving] = useState(false);
     const [percentageCard, setPercentageCard] = useState(false);
 
+
+
     const [incomesUSD, setIncomesUSD] = useState(null);
     const [expensesUSD, setExpensesUSD] = useState(null);
     const [cardsUSD, setCardsUSD] = useState(null);
@@ -63,6 +65,9 @@ const General = () => {
     const [pageSize, setPageSize] = useState(10);
     const [lineData, setLineData] = useState(null);
     const [doughnutExpensesData, setDoughnutExpensesData] = useState(null);
+    const [accumulatedBalance, setAccumulatedBalance] = useState(null)
+    const [accumulatedExpenses, setAccumulatedExpeses] = useState(null)
+    const [accumulatedIncomes, setAccumulatedIncomes] = useState(null)
 
     useEffect(() => {
         async function loadLazyData() {
@@ -146,9 +151,11 @@ const General = () => {
                         }
                     ]
 
-
                     
                 })
+                setAccumulatedBalance(data.accumulatedBalance)
+                setAccumulatedIncomes(data.notSpent)
+                setAccumulatedExpeses(data.spent)
 
                 // });
             } catch (err) {
@@ -678,7 +685,6 @@ const General = () => {
                 <div className="col-12 m-t-0">
                     <div className="card mb-0">
                         <div className="p-fluid formgrid grid">
-
                             <div className="col-12 lg:col-6 xl:col-6">
                                 <h5 className="centerText">Resumen anual en $</h5>
                                 <Chart   type="line" data={lineData} />
@@ -688,13 +694,31 @@ const General = () => {
                                 <h5 className='centerText'>Resumen anual en % en $ </h5>
                                 <Chart  type="bar" data={doughnutData} />
                             </div>
-                            <div className="col-12 lg:col-12 xl:col-12">
+                            <div className="col-12 lg:col-6 xl:col-6">
                                 <h5 className='centerText'>Resumen mensual de gastos {monthLabel} % en $ </h5>
                                 <div className="flex justify-content-center">
                                     <Chart style={{ position: 'relative', width: '5 0%' }} type="doughnut" data={doughnutExpensesData} />
                                 </div>
-                                </div>
                             </div>
+                            <div className="col-12 lg:col-6 xl:col-6">
+                                <h5 className="centerText">Acumulado anual en $</h5>
+
+                                    <div className="overview-box views">
+                                        <span className="overview-title"><i className="pi pi-chart-bar" style={{ fontSize: '1.5rem' }}></i> Balance acumulado</span>
+                                        <div className="overview-numbers">$ {accumulatedBalance || "0.00" }</div>
+                                        {/* <div className="overview-subinfo">21% more than yesterday</div> */}
+                                    </div>
+                                    <div className="overview-box checkin ">
+                                        <span className="overview-title"><i className="pi pi-server" style={{ fontSize: '1.5rem' }}></i> Ingresos acumulados</span>
+                                        <div className="overview-numbers">$ {accumulatedIncomes || "0.00" }</div>
+                                        {/* <div className="overview-subinfo">7% more than yesterday</div> */}
+                                    </div>
+                                    <div className="overview-box sales">
+                                        <span className="overview-title"><i className="pi pi-sort-amount-up " style={{ fontSize: '1.5rem' }}></i> Gastos acumulados</span>
+                                        <div className="overview-numbers">$ {accumulatedExpenses || "0.00" }</div>
+                                    </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <TagGeneral onDateCurrent={dateCurrent} onDateFormatInit={dateInit} onDateFormatEnd={dateEnd} onMonth={month} balance={balance} totalIncomes={totalIncomes} totalExpenses={totalExpenses} incomes={incomes} expenses={expenses} savings={savings} cards={cards} />
