@@ -17,7 +17,7 @@ const AppWrapper = () => {
 
     return (
         <Routes>
-            {/* <Route path="/" element={<Landing />} /> */}
+            <Route path="/" element={<Landing />} />
             {/* <Route path="/dashboard" element={<General />} /> */}
             <Route path="/error" element={<Error />} />
             <Route path="/notfound" element={<NotFound />} />

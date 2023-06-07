@@ -1,9 +1,12 @@
 .fixed-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  border-bottom: 1px solid #d8d8dc;
+  background-color: #ffffff;
+
     /* Añade otros estilos según tus necesidades, como colores, altura, etc. */
   }
 
@@ -13,3 +16,52 @@
     background-color: #ffffff;
 }
 
+  .pain {
+    padding: 42px 20px;
+    font-size: 18px;
+    color: #8b8b90;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d8d8dc;
+  }
+  .pain h2{
+    color: black;
+
+  }
+
+
+  .earn {
+    padding: 42px 20px;
+    font-size: 18px;
+    color: #8b8b90;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d8d8dc;
+  }
+  .earn h2{
+    color: black;
+
+  }
+
+
+  .contact {
+    padding: 42px 20px;
+    font-size: 18px;
+    color: #8b8b90;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d8d8dc;
+  }
+  .contact h2{
+    color: black;
+  }
+
+  .header-content-fix {
+    padding: 120px 20px  120px 20px;
+    width: 100%;
+    font-size: 18px;
+    color: #8b8b90;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d8d8dc;
+
+  }

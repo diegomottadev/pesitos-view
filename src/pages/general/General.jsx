@@ -79,13 +79,15 @@ const General = () => {
                 const totalExpensesMonth = data.recordMonths.map(record => parseFloat(record.expenses));
                 const totalSavingsMonth = data.recordMonths.map(record => parseFloat(record.savings));
                 const totalCardsMonth = data.recordMonths.map(record => parseFloat(record.cards));
-                const totalPercentegeIncomesMonth = data.recordMonths.map(record => parseFloat(record.percentage_not_spent));
-                const totalPercentegeExpensesMonth = data.recordMonths.map(record => parseFloat(record.percentage_expensives));
-                const totalPercentegeSavingsMonth = data.recordMonths.map(record => parseFloat(record.percentage_savings));
-                const totalPercentegeCardsMonth = data.recordMonths.map(record => parseFloat(record.percentage_cards));
+                const totalPercentegeIncomesMonth = data.recordMonths.map(record => record.percentage_not_spent);
+                const totalPercentegeExpensesMonth = data.recordMonths.map(record => record.percentage_expensives);
+                const totalPercentegeSavingsMonth = data.recordMonths.map(record => record.percentage_savings);
+                const totalPercentegeCardsMonth = data.recordMonths.map(record => record.percentage_cards);
                 // Actualizar la constante `lineData` con los nuevos datos
+                console.log(totalPercentegeIncomesMonth)
+                const uniqueMonths = [...new Set(months)];
                 setLineData({
-                    labels: [...months],
+                    labels: [...uniqueMonths],
                     datasets: [
                         {
                             label: 'Ingresos',
@@ -120,7 +122,7 @@ const General = () => {
 
 
                 setDoughnutData({
-                    labels: [...months],
+                    labels: [...uniqueMonths],
                     datasets: [
 
                         {

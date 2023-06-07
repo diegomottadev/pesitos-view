@@ -362,7 +362,7 @@ const App = () => {
     
                 <div className={menuContainerClassName} onClick={onMenuClick}>
                     <div className="layout-menu-logo">
-                        <button className="p-link text-center" onClick={() => navigate('/')}>
+                        <button className="p-link text-center" onClick={() => navigate('/dashboard')}>
                             <img  id="layout-menu-logo" src="assets/layout/images/pesitos-sidebar.png" library="babylon-layout" alt="babylon-logo" />
                         </button>
                     </div>
