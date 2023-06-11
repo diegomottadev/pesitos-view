@@ -54,7 +54,7 @@ export const Login = ({mostrarError,error,setToken}) => {
                         <Error mensaje={error}/>
                     </div> 
                     <div className="login-input-wrapper">   
-                        <InputText  placeholder="Email"  type="text" name="email" onChange={handleInputChange} value={usuario.email || ''} required/>
+                        <InputText  placeholder="Email o Nombre de usuario"  type="text" name="email" onChange={handleInputChange} value={usuario.email || ''} required/>
 
                         <i className="pi pi-user"></i>
                     </div>
