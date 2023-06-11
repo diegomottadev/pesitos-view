@@ -80,11 +80,11 @@ const General = () => {
                 const totalSavingsMonth = data.recordMonths.map(record => parseFloat(record.savings));
                 const totalCardsMonth = data.recordMonths.map(record => parseFloat(record.cards));
                 const totalPercentegeIncomesMonth = data.recordMonths.map(record => record.percentage_not_spent);
-                const totalPercentegeExpensesMonth = data.recordMonths.map(record => record.percentage_expensives);
+                const totalPercentegeExpensesMonth = data.recordMonths.map(record => record.percentage_expenses);
                 const totalPercentegeSavingsMonth = data.recordMonths.map(record => record.percentage_savings);
                 const totalPercentegeCardsMonth = data.recordMonths.map(record => record.percentage_cards);
                 // Actualizar la constante `lineData` con los nuevos datos
-                console.log(totalPercentegeIncomesMonth)
+                console.log(totalPercentegeExpensesMonth)
                 const uniqueMonths = [...new Set(months)];
                 setLineData({
                     labels: [...uniqueMonths],
