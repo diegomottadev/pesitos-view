@@ -155,7 +155,7 @@ const General = () => {
 
                     
                 })
-                setAccumulatedBalance(data.accumulatedBalance)
+                setAccumulatedBalance(data.accumulatedBalance || 0.00)
                 setAccumulatedIncomes(data.notSpent)
                 setAccumulatedExpeses(data.spent)
 
